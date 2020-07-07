@@ -14,7 +14,9 @@ def read(path, result):
 
 if __name__ == '__main__':
     Path = os.getcwd()
-    listDirs = os.path.join(Path, '../renommelog.txt')
+    Project_path = os.path.dirname(Path)
+
+    listDirs = Project_path + os.sep + 'data' + os.sep + 'renommelog.txt'
     print(listDirs)
     result = os.path.join(Path, 'list.txt')
 
