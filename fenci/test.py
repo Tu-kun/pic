@@ -1,5 +1,6 @@
 import jieba
 import jieba.posseg as pseg
+import jieba.analyse
 # jieba.enable_paddle()# 启动paddle模式。 0.40版之后开始支持，早期版本不支持
 # strs=[r"Z:\yuexun\2016图编外拍\桑浥\20160428手绘京城-北海-胡同-开幕式\大\100EOS1D\20160428手绘京城-北海-胡同-开幕式-桑浥 (361).JPG",
 #       r"Z:\yuexun\2017年外拍\闫珅\文博会911—JPG\闫珅—文博会911—JPG (862).jpg",
@@ -29,13 +30,31 @@ print("开启了HMM：{}".format(' '.join(seg_list)))
 title = "李晓尹李晓尹中国2016年11月18日美丽乡村顺义马坡镇南卷村美丽乡村顺义马坡镇南卷村村委会供图李晓尹中国2016年11月18日美丽乡村顺义马坡镇南卷村1"
 title2 = '李晓尹李晓尹中国2016年1月14日王府井猴年造型李晓尹第六届中国2016年1月14日左安门角楼复建'
 title3 = ['桑浥', '电影节', '第六届', '签约']
+print("cut模式")
 words = pseg.cut(repr(title2), use_paddle=True)  # paddle模式
 name = []
 rule = ['ns', 'nt', 'nz', 'f', 'i', 'l', 'j', 'vn', 'n', 'Ng', 'nr', 'z']
+print('未过滤前')
 for word, flag in words:
     print(" word:{}  flag: {} ".format(flag, word))
 print('*'*50)
 words = pseg.cut(repr(title2), use_paddle=True)  # paddle模式
+print('过滤后')
 for word, flag in words:
     if flag in rule:
         print(" word:{}  flag: {} ".format(flag, word))
+
+name = []
+rule = ['ns', 'nt', 'nz', 'f', 'i', 'l', 'j', 'vn', 'n', 'Ng', 'nr', 'z']
+
+print("关键字模式")
+words = jieba.analyse.extract_tags(repr(title2), allowPOS=rule)
+for word in words:
+    print(" word:{}".format(word))
+print('*'*50)
+
+print("关键字模式未过滤")
+words = jieba.analyse.extract_tags(repr(title2))  # paddle模式
+for word in words:
+    print(" word:{}".format(word))
+print('*'*50)

@@ -52,7 +52,7 @@ Donatas Stankevicius nr
 密云区 ns
 密云 ns
 密云水库 ns
-北京月讯杂志社 nt
+北京月讯杂志社 un
 广济寺 ns
 罗汉堂 ns
 大雄宝殿 ns
@@ -85,3 +85,4 @@ Donatas Stankevicius nr
 砖画青史——洛阳宋金时期砖雕影像展 nz
 心血浇灌的碎片——毕加索亲制银盘 n
 陶器展 n
+人生若只如初见 nz
