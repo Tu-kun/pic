@@ -83,3 +83,40 @@
 >实验中证明使用该参数时运行速度会变慢，不如自己写个if语句来判断  
 
 2.添加自定义字典时，如果字典内容过多会明显拖慢运行速度，因此需要使用高质量而非高数量的字典
+
+3.使jieba支持特殊字符，如外国人的中文翻译名‘多纳塔斯•斯坦科维休斯’这种格式  
+```
+搜索
+re_han_default = re.compile("([\u4E00-\u9FD5a-zA-Z0-9+#&\._]+)", re.U)
+改成
+re_han_default = re.compile("(.+)", re.U)
+搜索
+re_userdict = re.compile('^(.+?)( [0-9]+)?( [a-z]+)?$', re.U)
+改成
+re_userdict = re.compile('^(.+?)(\u0040\u0040[0-9]+)?(\u0040\u0040[a-z]+)?$', re.U)
+搜索
+word, freq = line.split(' ')[:2]
+改成
+word, freq = line.split('\u0040\u0040')[:2]
+搜索
+freq = freq.strip(' ')
+tag = tag.strip(' ')
+改成
+freq = freq.strip('@@')
+tag = tag.strip('@@')
+
+下面是posseg的init.py 文件
+搜索
+re_han_detail = re.compile("([\u4E00-\u9FD5]+)")
+修改为
+re_han_detail = re.compile("(.+)")
+搜索
+re_han_internal = re.compile("([\u4E00-\u9FD5a-zA-Z0-9+#&\._]+)")
+修改为
+re_han_internal = re.compile("(.+)")
+搜索
+word, _, tag = line.split(" ")
+修改为
+word, _, tag = line.split("\u0040\u0040")
+```
+4.对于标题中含有多个名字的情况。。。。。真的是很难通过算法自动识别出谁是真的摄影师

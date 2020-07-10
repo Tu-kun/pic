@@ -60,12 +60,14 @@ def get_time(title):
     time = year, month, day
     return time
 
+
 def load_dic():
     # 添加自定义词典
     jieba.load_userdict("fenci/dic.txt")
     # jieba.load_userdict("词库/行政地区.txt")
-    jieba.load_userdict("词库/中国风景名胜.txt")
+    # jieba.load_userdict("词库/中国风景名胜.txt")
     # jieba.load_userdict("词库/政府机关团体机构大全.txt")
+
 
 def get_name(title):
     """
@@ -88,7 +90,7 @@ def get_name(title):
     return name
 
 
-def get_keyWord(title, name):
+def get_keyWords(title, name):
     """
     获取关键字
     :param title: 图片标题
@@ -100,27 +102,17 @@ def get_keyWord(title, name):
     print('开始关键词的提取：{}'.format(title))
     jieba.analyse.set_stop_words('fenci/stop-words.txt')
     keyword_list = []
-    # jieba.enable_parallel(4)  # 开启并行分词模式，参数为并行进程数
+
+    #设置过滤规则，只留存关键字
     rule = ['ns', 'nt', 'nz', 'f', 'i', 'l', 'j', 'vn', 'n', 'Ng', 'nr', 'z']
     keywords_top = jieba.analyse.extract_tags(title, topK=10, allowPOS=rule)  # 关键词前10位，返回值为列表,allowPOD过滤指定词性的词
-    # keywords_top = jieba.analyse.extract_tags(title, topK=10)  # 关键词前10位，返回值为列表,allowPOD过滤指定词性的词
     # print('关键词top 15： {}'.format(keywords_top))
     for word in keywords_top:
         if word not in name and word.isalpha():  # 去除人名和日期
             keyword_list.append(word)
     print('关键字：{}'.format(keyword_list))
+
     return keyword_list
-    # return keyword_list
-    # 根据词性过滤有效信息
-    # rule = ['ns', 'nt', 'nz', 'f', 'i', 'l', 'j', 'vn', 'n', 'Ng', 'nr', 'z']
-    # words = pseg.cut(repr(keyword_list), use_paddle=True)  # paddle模式
-    # result_key = []  # 最终返回信息
-    # for word, flag in words:
-    #     if flag in rule:
-    #         # print(" word:{}  flag: {} ".format(flag, word))
-    #         result_key.append(word)
-    # print('过滤后关键字：{}'.format(result_key))
-    # return result_key
 
 
 def main(listDirs, result):
@@ -132,7 +124,7 @@ def main(listDirs, result):
     """
     time_none_number = 0
     with open(listDirs, 'r', encoding='utf-8') as file:
-        with open(result, 'w') as f:
+        with open(result, 'w', encoding='utf-8') as f:
             for line in file.readlines():
                 pic = {}
                 # 去除空格和连接符
@@ -154,7 +146,7 @@ def main(listDirs, result):
                 print('提取出的年月日：{}  {}  {}'.format(year, month, day))
                 name = get_name(''.join(title_list))  # 作者
                 # 从2级目录开始，0级为z，1级为yuexun，2级为照片来源 Z:\yuexun\摄影师投稿作品\2019年\魏建国-2018.12月北京月讯杂志社289张（2017-2018年拍
-                keyWords = get_keyWord(''.join(title_list[3:]), name)  # 关键字
+                keyWords = get_keyWords(''.join(title_list[3:]), name)  # 关键字
                 pic[number] = [tag_1, year, month, day, name, keyWords]
                 for key, value in pic.items():
                     f.write('{}\t'.format(key))
@@ -182,4 +174,5 @@ if __name__ == '__main__':
     f.close()
     end_time = time.time()
 
-    # print('程序运行时间为：｛｝'.format(end_time-start_time))
+    run_time = round(end_time - start_time, 5)
+    print('运行时间为：{}'.format(run_time))
