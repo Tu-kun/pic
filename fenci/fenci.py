@@ -168,6 +168,7 @@ def get_keyWords_byCut(title, name):
 
     return loc, keyword_list
 
+
 def main(listDirs, result):
     """
     读取照片标题集合的文件，进行处理
